@@ -10,6 +10,11 @@ router = APIRouter(prefix='/comments',
                    tags=['Comments'])
 
 
+@router.get('/{id}', response_model=schemas.CommentOut)
+def get_comment(comment: schemas.CommentOut = Depends(db_utils.db_get_comment_or_404)):
+    return comment
+
+
 @router.post('/', response_model=schemas.CommentOut, status_code=status.HTTP_201_CREATED)
 def create_comment(comment: schemas.CommentDB, db: Session = Depends(get_db),
                    current_user: int = Depends(get_current_user)):
