@@ -3,6 +3,7 @@ import httpx
 import pytest
 import asyncio
 
+from app.schemas import UserIn
 from app.main import app
 
 
@@ -24,8 +25,8 @@ async def test_client():
 # Creates a test user, signs in with the user, returns a token and then deletes it from the database
 @pytest.fixture
 async def test_access_token(test_client: httpx.AsyncClient):
-    payload = {'email': 'client_test@gm.com',
-               'password': 'test_password'}  # Create user info
+    payload = UserIn(email='client_test@gm.com',
+                     password='test_password').dict()  # Create user info
     # Create user in db
     new_user = await test_client.post('/users/', json=payload)
     # Extract returning information. Note: refer to schemas

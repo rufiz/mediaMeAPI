@@ -3,6 +3,8 @@ import pytest
 
 from fastapi import status
 
+from app.schemas import CommentDB
+
 
 @pytest.mark.asyncio
 class TestComments:
@@ -45,7 +47,8 @@ class TestComments:
 @pytest.fixture
 async def test_create_comment(test_client: httpx.AsyncClient, test_access_token):
     # Create a comment
-    payload = {'content': 'Test Content', 'post_id': 9}
+    payload = CommentDB(content='Test Content', post_id=9).dict()
+
     response = await test_client.post('/comments/', json=payload,
                                       headers={'Authorization': f'Bearer {test_access_token.get("access_token")}',
                                                'typ': 'JWT'})
