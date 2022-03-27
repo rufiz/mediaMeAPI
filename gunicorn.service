@@ -1,0 +1,13 @@
+[Unit]
+Description=mediaMe Application
+After=network.target
+
+[Service]
+User=rufizm
+Group=rufizm
+WorkingDirectory=/home/rufizm/rest_fastapi/src/
+Environment="PATH=/home/rufizm/rest_fastapi/venv/bin/"
+ExecStart=/home/rufizm/rest_fastapi/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
