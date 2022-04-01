@@ -26,8 +26,8 @@ async def test_client():
 @pytest.fixture
 async def test_access_token(test_client: httpx.AsyncClient):
     payload = UserIn(email='client_test@gm.com',
-                     password='test_password').dict()  # Create user info
-    # Create user in db
+                     password='test_password').dict()  # Create a user info
+    # Create a user in db
     new_user = await test_client.post('/users/', json=payload)
     # Extract returning information. Note: refer to schemas
     new_user_response = new_user.json()
