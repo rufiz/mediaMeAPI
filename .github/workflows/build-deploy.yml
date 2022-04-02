@@ -16,12 +16,14 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
 
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
           POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
+          POSTGRES_USER: postgres
         ports:
           - 5432:5432
         options: >-
@@ -29,7 +31,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    runs-on: ubuntu-latest
+
     steps:
       - name: pulling git repo
         uses: actions/checkout@v2
