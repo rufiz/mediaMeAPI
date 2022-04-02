@@ -45,4 +45,4 @@ jobs:
       - name: test with pytest
         run: pip install pytest
       - name: run all the tests
-        run: pytest
+        run: pytest --asyncio-mode=auto
