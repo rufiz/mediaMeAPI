@@ -3,7 +3,7 @@ name: Build and Deploy Code
 on: [push, pull_request]
 
 jobs:
-  build:
+  job1:
     environment:
       name: development
     env:
@@ -16,7 +16,6 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
 
-    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres
@@ -25,8 +24,12 @@ jobs:
           POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
         ports:
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+    runs-on: ubuntu-latest
     steps:
       - name: pulling git repo
         uses: actions/checkout@v2
