@@ -55,5 +55,5 @@ async def test_create_comment(test_client: httpx.AsyncClient, test_access_token)
     response_json = response.json()
     yield response
     # Delete the created comment
-    response = await test_client.delete(f'/comments/{response_json.get("id")}', headers={'Authorization': f'Bearer {test_access_token.get("access_token")}',
-                                                                                         'typ': 'JWT'})
+    await test_client.delete(f'/comments/{response_json.get("id")}', headers={'Authorization': f'Bearer {test_access_token.get("access_token")}',
+                                                                              'typ': 'JWT'})
