@@ -3,7 +3,7 @@ name: Build and Deploy Code
 on: [push, pull_request]
 
 jobs:
-  job1:
+  build:
     environment:
       name: development
     env:
@@ -12,9 +12,9 @@ jobs:
       DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
       DATABASE_NAME: ${{secrets.DATABASE_NAME}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
 
     services:
       postgres:
@@ -29,12 +29,11 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     runs-on: ubuntu-latest
     steps:
       - name: pulling git repo
         uses: actions/checkout@v2
-      - name: install python version 3.8
+      - name: Install python version 3.8
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
@@ -44,5 +43,5 @@ jobs:
         run: pip install -r requirements.txt
       - name: test with pytest
         run: pip install pytest
-      - name: run all the tests
+      - name: run pytest
         run: pytest --asyncio-mode=auto
