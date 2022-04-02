@@ -4,26 +4,26 @@ on: [push, pull_request]
 
 jobs:
   job1:
-    environment: 
+    environment:
       name: development
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}} 
+      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
       DATABASE_NAME: ${{secrets.DATABASE_NAME}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
 
-    services: 
+    services:
       postgres:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
           POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
-        ports: 
-          - 5432:5432      
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -36,11 +36,11 @@ jobs:
         uses: actions/checkout@v2
       - name: install python version 3.8
         uses: actions/setup-python@v2
-        with: 
-          python-version: '3.8'
-      - name: update pip 
-        run: python -m pip install --upgrade pip 
-      - name: install all dependencies 
+        with:
+          python-version: "3.8"
+      - name: update pip
+        run: python -m pip install --upgrade pip
+      - name: install all dependencies
         run: pip install -r requirements.txt
       - name: test with pytest
         run: pip install pytest
