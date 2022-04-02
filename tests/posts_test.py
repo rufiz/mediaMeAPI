@@ -24,19 +24,24 @@ class TestPosts:
         # Assert if the status code and the content match
         assert extracted_post.status_code == status.HTTP_200_OK
         assert extracted_post_json.get('title') == 'Pytest Fixture'
-        assert extracted_post_json.get('title') == 'Created with Pytest'
+        assert extracted_post_json.get('content') == 'Created with Pytest'
 
-    async def test_update_post_valid(self, test_client: httpx.AsyncClient, test_create_post):
+    async def test_update_post_valid(self, test_client: httpx.AsyncClient, test_create_post, test_access_token):
         # Create a post
         response = test_create_post
         response_json = response.json()
         # Update the created post
         post_to_update = PostPartialUpdate(title='Update with Pytest',
                                            content='Pytest is awesome').dict()
-        # Todo: finalize the tests for TestPosts
+        response_from_update_post = await test_client.put(f'/posts/{response_json.get("id")}', json=post_to_update, headers={'Authorization': f'Bearer {test_access_token.get("access_token")}',
+                                                                                                                             'typ': 'JWT'})
+        response_from_update_post_json = response_from_update_post.json()
         # Assert the response from the updated post is the same as
         # the response post
-        pass
+        assert response_from_update_post_json.get(
+            'title') == post_to_update.get('title')
+        assert response_from_update_post_json.get(
+            'content') == post_to_update.get('content')
 
 
 @pytest.fixture
@@ -47,6 +52,7 @@ async def test_create_post(test_client: httpx.AsyncClient, test_access_token):
     # Post it to the /posts/ endpoint
     response = await test_client.post('/posts/', json=payload,
                                       headers={'Authorization': f'Bearer {test_access_token.get("access_token")}'})
+    response_json = response.json()
     yield response
     # Once the tests are done delete the post
-    await test_client.delete(f'/posts/{response.get("id")}', headers={'Authorization': f'Bearer {test_access_token.get("access_token")}'})
+    response = await test_client.delete(f'/posts/{response_json.get("id")}', headers={'Authorization': f'Bearer {test_access_token.get("access_token")}'})

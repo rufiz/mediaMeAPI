@@ -31,7 +31,7 @@ async def test_access_token(test_client: httpx.AsyncClient):
     new_user = await test_client.post('/users/', json=payload)
     # Extract returning information. Note: refer to schemas
     new_user_response = new_user.json()
-    new_user_login_data = {'username': new_user_response.get('email'),
+    new_user_login_data = {'username': payload.get('email'),
                            'password': payload.get('password')}
     # Login and receive the access token
     access_token = await test_client.post('/login/', data=new_user_login_data)
