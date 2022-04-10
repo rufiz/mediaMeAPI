@@ -4,7 +4,12 @@ import pytest
 import asyncio
 
 from app.schemas import UserIn
+from app.database import get_db, Base
+from tests.database_test import override_get_db, engine
 from app.main import app
+
+
+app.dependency_overrides[get_db] = override_get_db
 
 
 @pytest.fixture(scope='session')
@@ -19,7 +24,9 @@ def event_loop():
 async def test_client():
     async with LifespanManager(app):
         async with httpx.AsyncClient(app=app, base_url='http://127.0.0.1:8000') as test_client:
+            Base.metadata.create_all(bind=engine)
             yield test_client
+            Base.metadata.drop_all(bind=engine)
 
 
 # Creates a test user, signs in with the user, returns a token and then deletes it from the database
