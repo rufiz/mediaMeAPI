@@ -7,9 +7,9 @@ jobs:
     environment:
       name: development
     env:
-      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
+      DATABASE_HOSTNAME: localhost
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
+      DATABASE_PASSWORD: postgres
       DATABASE_NAME: ${{secrets.DATABASE_NAME}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
@@ -21,6 +21,8 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
